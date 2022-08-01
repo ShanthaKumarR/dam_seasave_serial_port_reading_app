@@ -1,9 +1,10 @@
 import serial.tools.list_ports
 
 class PortReading:
-    def __init__(self, ):
+    def __init__(self):
         self.ports = serial.tools.list_ports.comports()
         self.serial_port = serial.Serial()
+        self.serial_port.port= 'COM5'
         self.get_connected_ports()
 
     def get_connected_ports(self):
@@ -16,7 +17,10 @@ class PortReading:
     def start_streaming(self):
         try:
             packet = self.serial_port.readline()
-            return packet.decode()
+            if len(packet) == 0:
+                return 'No data'
+            else:
+                return packet.decode()
         except serial.SerialTimeoutException:
             return 'time_out'
         except serial.serialutil.SerialException:
